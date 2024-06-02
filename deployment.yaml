@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simple-app
+  template:
+    metadata:
+      labels:
+        app: simple-app
+    spec:
+      containers:
+      - name: simple-container
+        image: nginx
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: storage-1gb
+        - mountPath: /mnt/data
+          name: storage-2gb
+      volumes:
+      - name: storage-1gb
+        persistentVolumeClaim:
+          claimName: pvc-1gb
+      - name: storage-2gb
+        persistentVolumeClaim:
+          claimName: pvc-2gb
+
